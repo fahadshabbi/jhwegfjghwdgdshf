@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F&N Rentals</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Header and Navigation */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header img {
+            width: 120px; /* Adjust the width as per the logo size */
+            height: auto;
+        }
+
+        header nav ul {
+            list-style-type: none;
+        }
+
+        header nav ul li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        header nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            background-color: #0066cc;
+            color: white;
+            padding: 50px 0;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        /* Cars Section */
+        .cars {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding: 0 20px;
+        }
+
+        .car-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            margin: 20px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .car-card:active {
+            transform: scale(0.98);
+        }
+
+        .car-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .car-card h3 {
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .car-card p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* Modal Section */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            z-index: 1000;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            margin-bottom: 10px;
+            color: #0066cc;
+        }
+
+        .modal p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .modal button:hover {
+            background-color: #45a049;
+        }
+
+        .modal button:active {
+            transform: scale(0.95);
+        }
+
+        .modal .close {
+            background-color: #ff4d4d;
+            margin-right: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Footer Section */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        footer p {
+            font-size: 1em;
+        }
+
+        /* Additional Styling for Login and Signup */
+        .modal input[type="checkbox"] {
+            width: auto;
+            display: inline-block;
+        }
+    </style>
+    <script>
+        // Function to show modal for car details
+        function showCarDetails(carName, color, dayPrice, weekPrice) {
+            document.getElementById('modal-title').innerText = carName;
+            document.getElementById('modal-color').innerText = `Color: ${color}`;
+            document.getElementById('modal-day-price').innerText = `Price for 1 Day: $${dayPrice}`;
+            document.getElementById('modal-week-price').innerText = `Price for 1 Week: $${weekPrice}`;
+            document.querySelector('.modal').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        // Function to show login modal
+        function showLogin() {
+            document.querySelector('.login-modal').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        // Function to show signup modal
+        function showSignup() {
+            document.querySelector('.signup-modal').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.querySelector('.modal').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+            document.querySelector('.login-modal').style.display = 'none';
+            document.querySelector('.signup-modal').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <img src="C:\Users\Fahad Shabbir Bhatti\Downloads\DALL·E 2024-12-04 13.35.07 - A modern and sleek logo design for 'F&N Rentals'. The logo should feature a combination of bold typography with a minimalist icon representing luxury .webp" alt="F&N Rentals Logo">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="javascript:void(0);" onclick="showLogin()">Login</a></li>
+                <li><a href="javascript:void(0);" onclick="showSignup()">Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Welcome to F&N Rentals</h1>
+        <p>Explore our luxury cars and enjoy premium services.</p>
+    </div>
+
+    <!-- Cars Section -->
+    <section class="cars">
+        <h2>Our Fleet</h2>
+        <div class="car-card" onclick="showCarDetails('Bugatti', 'Royal Black', 500, 3000)">
+            <img src="https://robbreport.com/wp-content/uploads/2024/01/1500chiron01.jpg?w=1000" alt="Bugatti" class="car-image">
+            <h3>Bugatti</h3>
+            <p>Color: Royal Black</p>
+            <button onclick="showCarDetails('Bugatti', 'Royal Black', 500, 3000)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('Lamborghini', 'Neon Orange', 400, 2500)">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5WdqSFaAIJirMP-8X9JeKJVKKO5ULsfYGtw&si" alt="Lamborghini" class="car-image">
+            <h3>Lamborghini</h3>
+            <p>Color: Neon Orange</p>
+            <button onclick="showCarDetails('Lamborghini', 'Neon Orange', 400, 2500)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('Ferrari', 'Red', 450, 2800)">
+            <img src="https://cdn.shopify.com/s/files/1/0035/9877/8435/files/Ferrari_LaFerrari_in_Rosso_Alltruadh_2048x2048.jpg?v=1708067402" alt="Ferrari" class="car-image">
+            <h3>Ferrari</h3>
+            <p>Color: Red</p>
+            <button onclick="showCarDetails('Ferrari', 'Red', 450, 2800)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('Porsche', 'Black', 350, 2100)">
+            <img src="https://bluesky.cdn.imgeng.in/cogstock-images/499513eb-6238-4849-ad78-00fdd1e38227.jpg?imgeng=/w_1920/" alt="Porsche" class="car-image">
+            <h3>Porsche</h3>
+            <p>Color: Black</p>
+            <button onclick="showCarDetails('Porsche', 'Black', 350, 2100)">Book</button>
+        </div>
+        <!-- Adding 5 More Cars -->
+        <div class="car-card" onclick="showCarDetails('Tesla', 'Silver', 300, 1800)">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYosjjV6g2qPAvNJu42WuMNTYmRPzC06O2ig&s" alt="Tesla" class="car-image">
+            <h3>Tesla</h3>
+            <p>Color: Silver</p>
+            <button onclick="showCarDetails('Tesla', 'Silver', 300, 1800)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('BMW', 'White', 350, 2100)">
+            <img src="https://static.wixstatic.com/media/1753b1_e75c2eb37dbe43d78ca2952cd8843ab3~mv2.jpeg/v1/fill/w_980,h_714,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/1753b1_e75c2eb37dbe43d78ca2952cd8843ab3~mv2.jpeg" alt="BMW" class="car-image">
+            <h3>BMW</h3>
+            <p>Color: White</p>
+            <button onclick="showCarDetails('BMW', 'White', 350, 2100)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('G-Wagon ', 'Grey', 400, 2400)">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrx-7ET_ate-47bfRRaXPzrVbPc2fLWh8Shw&s" alt="Mercedes" class="car-image">
+            <h3>G-Wagon</h3>
+            <p>Color: Grey</p>
+            <button onclick="showCarDetails('G-Wagon', 'Grey', 400, 2400)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('Audi-E- Tron', 'Blue', 350, 2100)">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGosC-DDooC9R6_mByxnoClrQL88F2dGctgw&s" alt="Audi" class="car-image">
+            <h3>Audi-E-Tron</h3>
+            <p>Color: Blue</p>
+            <button onclick="showCarDetails('Audi-E-Tron', 'Blue', 350, 2100)">Book</button>
+        </div>
+        <div class="car-card" onclick="showCarDetails('Jaguar', 'Green', 380, 2200)">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ8MIG-lTKsqeo4YrI2W7TPqBknMIIl4sSMw&s" alt="Jaguar" class="car-image">
+            <h3>Jaguar</h3>
+            <p>Color: Green</p>
+            <button onclick="showCarDetails('Jaguar', 'Green', 380, 2200)">Book</button>
+        </div>
+    </section>
+
+    <!-- Modal for Car Details -->
+    <div class="modal">
+        <h2 id="modal-title"></h2>
+        <p id="modal-color"></p>
+        <p id="modal-day-price"></p>
+        <p id="modal-week-price"></p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal login-modal">
+        <h2>Login</h2>
+        <input type="text" placeholder="Username" id="login-username">
+        <input type="password" placeholder="Password" id="login-password">
+        <button onclick="closeModal()">Login</button>
+        <button class="close" onclick="closeModal()">Close</button>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal signup-modal">
+        <h2>Signup</h2>
+        <input type="text" placeholder="Username" id="signup-username">
+        <input type="email" placeholder="Email" id="signup-email">
+        <input type="password" placeholder="Password" id="signup-password">
+        <button onclick="closeModal()">Signup</button>
+        <button class="close" onclick="closeModal()">Close</button>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" onclick="closeModal()"></div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 F&N Rentals. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
